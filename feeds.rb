@@ -18,16 +18,22 @@ rss = SimpleRSS.parse open(feed_url)
 
 rss.items.each do |item|
   next if item.title =~ /pushed/
-  now = Time.now
 
+  # init
+  now = Time.now
   updated = item.updated.getlocal
-  #p "#{updated} > #{5.minutes.ago(now)}"
-  #p "[#{updated}] #{item.title}"
-  if item.updated > now - 6.minutes
-    p "[#{updated}] #{item.title}"
+  regex_content = /blockquote&gt;(.+)&lt;\/blockquote/
+
+  if item.updated > now - 5.minutes
+    #p "[#{updated}] #{item.title}"
+
+    content = ''
+    contents = item.content.gsub(/\n/, '').scan(regex_content)
+    content = contents.pop.pop.strip unless contents.empty?
 
     # via ikachan
     system("curl -F channel=\##{$IRC_CHANNEL} -F message=\"GitHub  #{item.title} \" #{$IRC_URL}")
+    system("curl -F channel=\##{$IRC_CHANNEL} -F message=\"GitHub  #{content}  \" #{$IRC_URL}") if content.present?
     system("curl -F channel=\##{$IRC_CHANNEL} -F message=\"GitHub  #{item.link}  \" #{$IRC_URL}")
   end
 end
