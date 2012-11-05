@@ -5,6 +5,7 @@ GEM
       activesupport (= 3.0.0)
     activesupport (3.0.0)
     addressable (2.2.8)
+    escape_utils (0.2.4)
     faraday (0.8.1)
       multipart-post (~> 1.1)
     faraday_middleware (0.8.8)
@@ -25,5 +26,6 @@ PLATFORMS
 
 DEPENDENCIES
   active_support
+  escape_utils
   octokit
   simple-rss

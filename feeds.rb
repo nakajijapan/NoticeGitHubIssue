@@ -4,6 +4,23 @@ require 'open-uri'
 require 'simple-rss'
 require 'active_support/all'
 
+
+#---------------------------------------
+# a painful modification
+#---------------------------------------
+class SimpleRSS_CSTM < SimpleRSS
+  def unescape(content)
+    if content =~ /([^-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]]%)/u then
+      CGI.unescape(content).gsub(/(<!\[CDATA\[|\]\]>)/,'').strip
+    else
+      content.gsub(/(<!\[CDATA\[|\]\]>)/,'').strip
+    end
+  end
+end
+
+#---------------------------------------
+# main
+#---------------------------------------
 load File::expand_path('', File::dirname(__FILE__)) + '/config.rb'
 
 if ARGV[0].nil?
@@ -14,7 +31,7 @@ organization = ARGV[0]
 
 feed_url = "https://github.com/organizations/#{organization}/#{$USERNAME}.private.atom?token=#{$USER_TOKEN}"
 
-rss = SimpleRSS.parse open(feed_url)
+rss = SimpleRSS_CSTM.parse open(feed_url)
 
 rss.items.each do |item|
   next if item.title =~ /pushed/
@@ -24,9 +41,8 @@ rss.items.each do |item|
   updated = item.updated.getlocal
   regex_content = /blockquote&gt;(.+)&lt;\/blockquote/
 
+  #p "[#{updated}] #{item.title}"
   if item.updated > now - 5.minutes
-    #p "[#{updated}] #{item.title}"
-
     content = ''
     contents = item.content.gsub(/\n/, '').scan(regex_content)
     content = contents.pop.pop.strip unless contents.empty?
