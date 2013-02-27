@@ -1,0 +1,7 @@
+# config
+$SAVING_ID_FILE = './cache/issues.id'
+$USERNAME       = ''
+$IRC_CHANNEL    = ''
+$IRC_URL        = ''
+
+$USER_TOKEN    = ''
