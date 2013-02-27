@@ -45,7 +45,11 @@ rss.items.each do |item|
   if item.updated > now - 5.minutes
     content = ''
     contents = item.content.gsub(/\n/, '').scan(regex_content)
-    content = contents.pop.pop.strip unless contents.empty?
+    unless contents.empty?
+      content = contents.pop.pop.strip
+      content = content.gsub(/&lt;\/?p&gt;/, '') 
+      content = content.gsub(/&lt;\/?code&gt;/, '') 
+    end
 
     # via ikachan
     system("curl -F channel=\##{$IRC_CHANNEL} -F message=\"GitHub  #{item.title} \" #{$IRC_URL}")
