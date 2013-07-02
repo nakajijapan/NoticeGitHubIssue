@@ -20,8 +20,9 @@ $USER_TOKEN    = ''
 #### setting clon
 
 ```bash
-*/5 * * * * /bin/bash -c 'export PATH="$HOME/.rbenv/bin:$PATH" ; eval "$(rbenv init -)"; ruby /path/to/issues.rb repo;'
-*/5 * * * * /bin/bash -c 'export PATH="$HOME/.rbenv/bin:$PATH" ; eval "$(rbenv init -)"; ruby /path/to/feeds.rb repo;'
+export PATH="$HOME/.rbenv/bin:$PATH"
+
+*/5 * * * * /bin/bash -c 'eval "$(rbenv init -)"; cd /path/to/; ruby feeds.rb repo;'
 ```
 
 
