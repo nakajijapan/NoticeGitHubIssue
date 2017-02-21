@@ -2,5 +2,5 @@ source 'https://rubygems.org'
 
 gem 'octokit'
 gem 'simple-rss'
-gem 'active_support'
+gem 'activesupport'
 gem "escape_utils"
